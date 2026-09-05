@@ -580,7 +580,9 @@ def render_mentions():
     # build/telephone.html est une page HTML autonome (noindex) : on n'en extrait
     # que le fragment <li> avec le numero, pour l'inserer dans les mentions.
     src = open(os.path.join(ROOT, "build", "telephone.html"), encoding="utf-8").read()
-    tel = re.search(r"<li>.*?</li>", src, re.S).group(0).strip()
+    # Regex ancree sur « Téléphone » : une recherche naive sur <li> matcherait
+    # le commentaire HTML d'en-tete du fragment.
+    tel = re.search(r"<li>Téléphone\s*:.*?</li>", src, re.S).group(0).strip()
     body = f"""
 <div class="cadre prose">
 <h1>Mentions légales</h1>
