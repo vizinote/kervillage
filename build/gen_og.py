@@ -3,7 +3,11 @@
 # dependencies = ["pillow"]
 # ///
 """Genere assets/og-image.png (1200x630) pour Kervillage."""
+import os
+
 from PIL import Image, ImageDraw, ImageFont
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 W, H = 1200, 630
 PAPIER = (247, 243, 234)
@@ -39,9 +43,9 @@ marge = 90
 d.text((marge, 170), "K E R V I L L A G E", font=font(40, bold=True, serif=False), fill=OR)
 d.text((marge, 250), "Ton village", font=font(120, bold=True), fill=ACCENT)
 d.text((marge, 385), "en breton", font=font(120, bold=True), fill=ACCENT)
-d.text((marge, 545), "Nom breton officiel, signification, décodeur de panneaux.",
+d.text((marge, 545), "Nom breton, signification, décodeur de panneaux.",
        font=font(30, serif=False), fill=DOUX)
 d.text((marge, H - 48), "kervillage.brozapi.com", font=font(26, serif=False), fill=OR)
 
-img.save("/opt/data/kanban/boards/brozapi/workspaces/t_a0972353/kervillage/assets/og-image.png")
+img.save(os.path.join(ROOT, "assets", "og-image.png"))
 print("og-image.png ecrit")

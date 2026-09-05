@@ -1,6 +1,6 @@
 # Kervillage — ton village en breton
 
-Site statique gratuit : le nom breton officiel de chaque commune de Bretagne historique,
+Site statique gratuit : le nom breton de chaque commune de Bretagne historique,
 sa lecture brique par brique, et un décodeur de panneaux.
 
 - Production : https://kervillage.brozapi.com (GitHub Pages)

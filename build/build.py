@@ -460,11 +460,11 @@ def render_index(communes, nb_lieux):
     body = f"""
 <section class="cadre hero">
   <h1 class="hero__titre">Ton village<br>en breton</h1>
-  <p class="hero__sous">Le nom breton officiel de ta commune, ce qu'il signifie,
+  <p class="hero__sous">Le nom breton de ta commune, ce qu'il signifie,
   et la clé pour lire les panneaux de Bretagne. Gratuit, sourcé, sans compte.</p>
   {header_recherche()}
   <p class="hero__stats">{nb(len(communes))} communes et {nb(nb_lieux)} lieux-dits couverts
-  dans les cinq départements de Bretagne historique.</p>
+  dans les cinq départements de Bretagne historique, plus quelques communes limitrophes.</p>
 </section>
 <section class="cadre carte-section">
   <h2>Les cinq départements</h2>
@@ -499,7 +499,7 @@ def render_index(communes, nb_lieux):
 </section>
 """
     return page(f"{SITE_NAME} — {TAGLINE}",
-                "Le nom breton officiel de ta commune, sa signification et un décodeur pour lire "
+                "Le nom breton de ta commune, sa signification et un décodeur pour lire "
                 "les panneaux de Bretagne. Gratuit et sourcé.",
                 body, "/")
 
@@ -511,12 +511,16 @@ def render_departement(code, communes_dept, nb_lieux_dept):
         f'<li><a href="/c/{c["insee"]}-{fold(c["nom_fr"])}.html">{html.escape(c["nom_fr"])}</a>'
         f' <span class="liste__br" lang="br">{html.escape(c["nom_br"])}</span></li>'
         for c in sorted(communes_dept, key=lambda x: fold(x["nom_fr"])))
+    note_limitrophes = (
+        "\n  <p>Quelques communes limitrophes du pays nantais (Vendée, Maine-et-Loire) "
+        "figurent aussi dans cette liste : elles appartiennent au même territoire "
+        "de toponymie bretonne.</p>" if code == "44" else "")
     body = f"""
 <div class="cadre">
   <p class="fiche__fil"><a href="/">Accueil</a></p>
   <h1>{html.escape(nom)} ({code})</h1>
   <p>{len(communes_dept)} communes, toutes avec leur nom breton, et {nb_lieux_dept} lieux-dits répertoriés
-  dans la base. Cherche un nom ci-dessous ou parcours la liste.</p>
+  dans la base. Cherche un nom ci-dessous ou parcours la liste.</p>{note_limitrophes}
   {header_recherche()}
   <ul class="liste">{items}</ul>
 </div>
@@ -573,7 +577,10 @@ def render_simple(md_file, title, desc, canonical, complement=""):
 
 
 def render_mentions():
-    tel = open(os.path.join(ROOT, "build", "telephone.html"), encoding="utf-8").read().strip()
+    # build/telephone.html est une page HTML autonome (noindex) : on n'en extrait
+    # que le fragment <li> avec le numero, pour l'inserer dans les mentions.
+    src = open(os.path.join(ROOT, "build", "telephone.html"), encoding="utf-8").read()
+    tel = re.search(r"<li>.*?</li>", src, re.S).group(0).strip()
     body = f"""
 <div class="cadre prose">
 <h1>Mentions légales</h1>

@@ -24,7 +24,7 @@ Les étymologies et les sens des noms s'appuient sur Wikipédia en breton, dont 
 1. On rassemble les noms depuis les sources ci-dessus, sans rien réécrire soi-même.
 2. On les décompose en briques (Plou-, Ker-, Loc-…) pour expliquer la construction de chaque nom.
 3. Chaque fiche affiche sa source, de façon visible.
-4. L'ensemble du contenu est relu par une personne qui parle breton avant publication.
+4. Chaque fiche est vérifiée systématiquement contre sa source avant publication.
 
 ## Ce que ce site n'est pas
 
