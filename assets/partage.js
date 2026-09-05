@@ -27,21 +27,21 @@
     var ctx = canvas.getContext("2d");
 
     // fond papier
-    ctx.fillStyle = "#f7f3ea";
+    ctx.fillStyle = "#FBF8F0";
     ctx.fillRect(0, 0, W, H);
     // filet haut
-    ctx.fillStyle = "#0e4f5c";
+    ctx.fillStyle = "#0A3E54";
     ctx.fillRect(0, 0, W, 14);
 
     var marge = 90;
 
     // nom francais
-    ctx.fillStyle = "#4c5a54";
+    ctx.fillStyle = "#4C6267";
     ctx.font = "600 34px -apple-system, 'Segoe UI', Roboto, sans-serif";
     ctx.fillText(fiche.nomFr.toUpperCase().split("").join(" "), marge, 150);
 
     // nom breton en grand
-    ctx.fillStyle = "#0e4f5c";
+    ctx.fillStyle = "#0A3E54";
     var taille = 110;
     ctx.font = "700 " + taille + "px Georgia, 'Times New Roman', serif";
     while (ctx.measureText(fiche.nomBr).width > W - 2 * marge && taille > 44) {
@@ -52,7 +52,7 @@
 
     // phrase de sens
     var y = 150 + taille + 90;
-    ctx.fillStyle = "#1d2a26";
+    ctx.fillStyle = "#0E2A33";
     ctx.font = "400 32px Georgia, serif";
     var ls = lignes(ctx, fiche.sens, W - 2 * marge);
     ls.slice(0, 3).forEach(function (l, i) {
@@ -60,10 +60,10 @@
     });
 
     // pied
-    ctx.fillStyle = "#a5772a";
+    ctx.fillStyle = "#8A6414";
     ctx.font = "700 26px -apple-system, 'Segoe UI', Roboto, sans-serif";
     ctx.fillText("KERVILLAGE", marge, H - 70);
-    ctx.fillStyle = "#4c5a54";
+    ctx.fillStyle = "#4C6267";
     ctx.font = "400 26px -apple-system, 'Segoe UI', Roboto, sans-serif";
     ctx.fillText("kervillage.brozapi.com", marge + 220, H - 70);
 

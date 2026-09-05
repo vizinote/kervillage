@@ -33,7 +33,7 @@
     if (!resultats.length) {
       var li = document.createElement("li");
       var sp = document.createElement("span");
-      sp.style.cssText = "display:block;padding:.65rem 1rem;color:#4c5a54";
+      sp.style.cssText = "display:block;padding:.65rem 1rem;color:#4C6267";
       sp.textContent = "Aucun résultat — essaie sans les accents, ou avec le nom breton.";
       li.appendChild(sp);
       liste.appendChild(li);

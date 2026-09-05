@@ -307,7 +307,7 @@ def page(title, desc, body, canonical, extra_head=""):
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="entete">
   <div class="cadre">
-    <a class="marque" href="/"><span class="marque__nom">{SITE_NAME}</span> <span class="marque__sig">{TAGLINE}</span></a>
+    <a class="marque" href="/"><span class="marque__hermine" aria-hidden="true"><svg width="24" height="30" viewBox="0 0 16 20" fill="none"><circle cx="4.6" cy="4" r="1.5" fill="currentColor"/><circle cx="11.4" cy="4" r="1.5" fill="currentColor"/><circle cx="8" cy="8" r="1.7" fill="currentColor"/><path d="M8 11c-1.4 1.6-1.4 5-1.4 7 0 .7 1.4 1.3 1.4.7-.05.6 1.4 0 1.4-.7 0-2 0-5.4-1.4-7z" fill="currentColor"/></svg></span><span class="marque__nom">{SITE_NAME}</span> <span class="marque__sig">{TAGLINE}</span></a>
     <nav class="nav" aria-label="Navigation principale">
       <a href="/">Accueil</a>
       <a href="/decodeur.html">Décodeur</a>
@@ -316,6 +316,7 @@ def page(title, desc, body, canonical, extra_head=""):
     </nav>
   </div>
 </header>
+<div class="filet" aria-hidden="true"></div>
 <main id="contenu">
 {body}
 </main>
@@ -459,6 +460,7 @@ def render_index(communes, nb_lieux):
                  + "".join(paths) + "</svg>")
     body = f"""
 <section class="cadre hero">
+  <hr class="hero__regle" aria-hidden="true">
   <h1 class="hero__titre">Ton village<br>en breton</h1>
   <p class="hero__sous">Le nom breton de ta commune, ce qu'il signifie,
   et la clé pour lire les panneaux de Bretagne. Gratuit, sourcé, sans compte.</p>

@@ -1,13 +1,21 @@
-/* Kervillage — charte Brozapi (D21) : sobre, premium, patte humaine, zero folklore */
+/* Kervillage — direction « Glaz & Ajonc » (choix Franck 2026-09-05, verrou DA D21)
+   Reference exacte : maquette 03a-present.html (rappel drapeau niveau 1).
+   Mer profonde #0A3E54 (header/hero/footer), papier chaud #FBF8F0, encre #0E2A33,
+   liens bleu-mer #0A5068, accent ajonc dore #C8962E. */
 :root {
-  --papier: #f7f3ea;
-  --papier-2: #efe9db;
-  --encre: #1d2a26;
-  --encre-doux: #4c5a54;
-  --accent: #0e4f5c;
-  --accent-clair: #d7e5e2;
-  --or: #a5772a;
-  --ligne: #d9d1bf;
+  --papier: #FBF8F0;
+  --papier-2: #F2EFE5;
+  --encre: #0E2A33;
+  --encre-doux: #4C6267;
+  --brand: #0A3E54;        /* mer profonde — header, hero, footer */
+  --brand-encre: #F2EFE6;  /* texte clair sur mer */
+  --brand-doux: #A8C0C4;   /* secondaire sur mer (AA) */
+  --accent: #C8962E;       /* ajonc dore */
+  --or-texte: #8A6414;     /* ajonc fonce pour petit texte sur fond clair (AA) */
+  --lien: #0A5068;
+  --lien-hover: #C8962E;
+  --ligne: #DADDD2;
+  --fond-info: #E9EEE5;    /* carte departements, badges source */
   --rayon: 10px;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -28,28 +36,38 @@ body {
 }
 .skip:focus { left: 1rem; top: 1rem; background: var(--encre); color: var(--papier); padding: .5rem 1rem; z-index: 10; }
 
-/* ---------- entete ---------- */
-.entete { border-bottom: 1px solid var(--ligne); background: var(--papier); }
+/* ---------- entete (mer profonde) ---------- */
+.entete { border-bottom: 1px solid var(--ligne); background: var(--brand); color: var(--brand-encre); }
 .entete .cadre { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; padding-top: 1rem; padding-bottom: 1rem; }
-.marque { text-decoration: none; color: var(--encre); }
-.marque__nom { font-family: var(--serif); font-size: 1.45rem; font-weight: 700; letter-spacing: .01em; }
-.marque__nom::first-letter { color: var(--accent); }
-.marque__sig { color: var(--encre-doux); font-size: .92rem; margin-left: .35rem; }
+.marque { text-decoration: none; color: inherit; display: inline-flex; align-items: baseline; }
+.marque__hermine {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.2rem; height: 2.2rem;
+  background: #FFFFFF; border-radius: 4px; color: #0A0A0A;
+  margin-right: .6rem; vertical-align: -5px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06);
+}
+.marque__nom { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; letter-spacing: .01em; }
+.marque__sig { color: var(--brand-doux); font-size: .92rem; margin-left: .4rem; }
 .nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
-.nav a { color: var(--encre-doux); text-decoration: none; font-size: .95rem; border-bottom: 2px solid transparent; padding-bottom: 2px; }
-.nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.nav a { color: var(--brand-doux); text-decoration: none; font-size: .95rem; border-bottom: 2px solid transparent; padding-bottom: 2px; }
+.nav a:hover { color: var(--brand-encre); border-bottom-color: var(--accent); }
 
-/* ---------- hero ---------- */
-.hero { padding: 3.2rem 1.25rem 2rem; text-align: center; }
+/* rappel Gwenn ha Du — filet noir/blanc fin sous l'entete */
+.filet { height: 3px; background: repeating-linear-gradient(90deg, #0A0A0A 0 16px, #FBF8F0 16px 32px); }
+
+/* ---------- hero (mer profonde) ---------- */
+.hero { padding: 3.4rem 1.25rem 2.2rem; text-align: center; background: var(--brand); color: var(--brand-encre); border-bottom: 1px solid rgba(255,255,255,.14); }
+.hero__regle { width: 3.5rem; height: 3px; background: var(--accent); margin: 0 auto 1.2rem; border: 0; }
 .hero__titre {
   font-family: var(--serif);
-  font-size: clamp(2.6rem, 7vw, 4rem);
-  line-height: 1.08;
+  font-size: clamp(2.7rem, 7.5vw, 4.2rem);
+  line-height: 1.05;
   margin: 0 0 1rem;
   font-weight: 700;
 }
-.hero__sous { max-width: 34rem; margin: 0 auto 2.2rem; color: var(--encre-doux); font-size: 1.08rem; }
-.hero__stats { margin-top: 1.6rem; color: var(--encre-doux); font-size: .92rem; }
+.hero__sous { max-width: 34rem; margin: 0 auto 2.2rem; color: var(--brand-doux); font-size: 1.1rem; }
+.hero__stats { margin-top: 1.7rem; color: var(--brand-doux); font-size: .92rem; }
 
 /* ---------- recherche ---------- */
 .recherche { position: relative; max-width: 34rem; margin: 0 auto; text-align: left; }
@@ -57,23 +75,25 @@ body {
 .recherche__champ {
   width: 100%;
   font-size: 1.15rem;
-  padding: .85rem 1rem;
-  border: 2px solid var(--encre);
+  padding: .9rem 1rem;
+  border: 2px solid var(--brand);
   border-radius: var(--rayon);
-  background: #fff;
+  background: #FFFFFF;
   color: var(--encre);
   font-family: var(--sans);
 }
-.recherche__champ:focus { outline: 3px solid var(--accent-clair); border-color: var(--accent); }
-.recherche__aide { font-size: .85rem; color: var(--encre-doux); margin: .4rem 0 0; }
+.recherche__champ::placeholder { color: var(--encre-doux); }
+.recherche__champ:focus { outline: 3px solid var(--accent); border-color: var(--lien-hover); }
+.recherche__aide { font-size: .85rem; color: var(--encre-doux); margin: .45rem 0 0; }
+.hero .recherche__aide { color: var(--brand-doux); }
 .recherche__resultats {
   position: absolute; left: 0; right: 0; top: 100%;
   margin: .35rem 0 0; padding: 0;
   list-style: none;
-  background: #fff;
+  background: #FFFFFF;
   border: 1px solid var(--ligne);
   border-radius: var(--rayon);
-  box-shadow: 0 10px 30px rgba(29, 42, 38, .12);
+  box-shadow: 0 12px 32px rgba(10, 62, 84, .18);
   overflow: hidden;
   z-index: 5;
 }
@@ -83,40 +103,44 @@ body {
   display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
   padding: .65rem 1rem; text-decoration: none; color: var(--encre);
 }
-.recherche__resultats a:hover, .recherche__resultats a[aria-selected="true"] { background: var(--accent-clair); }
+.recherche__resultats a:hover, .recherche__resultats a[aria-selected="true"] { background: var(--papier-2); }
 .recherche__resultats .res__fr { font-weight: 600; }
-.recherche__resultats .res__br { font-family: var(--serif); color: var(--accent); }
+.recherche__resultats .res__br { font-family: var(--serif); color: var(--lien); }
 .recherche__resultats .res__meta { font-size: .8rem; color: var(--encre-doux); white-space: nowrap; }
 
 /* ---------- carte ---------- */
-.carte-section { padding: 2.5rem 1.25rem 1rem; text-align: center; }
-.carte-section h2 { font-family: var(--serif); }
+.carte-section { padding: 2.8rem 1.25rem 1rem; text-align: center; }
+.carte-section h2 { font-family: var(--serif); font-size: 1.6rem; margin-top: 0; }
 .carte-wrap { max-width: 30rem; margin: 0 auto; }
 .carte { width: 100%; height: auto; }
-.carte__dept { fill: var(--accent-clair); stroke: var(--accent); stroke-width: 1.4; transition: fill .15s ease; }
+.carte__dept { fill: var(--fond-info); stroke: var(--brand); stroke-width: 1.6; transition: fill .15s ease; }
 a:hover .carte__dept, a:focus .carte__dept { fill: var(--accent); }
-.dept-liens { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: center; list-style: none; padding: 0; margin: 1.2rem 0 0; }
-.dept-liens a { color: var(--accent); }
+.dept-liens { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: center; list-style: none; padding: 0; margin: 1.3rem 0 0; }
+.dept-liens a { color: var(--lien); font-weight: 600; text-underline-offset: 3px; }
+.dept-liens a:hover { color: var(--lien-hover); }
 
 /* ---------- trois colonnes ---------- */
-.trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; padding: 2.5rem 1.25rem; max-width: 62rem; }
-.trois__col h2 { font-family: var(--serif); font-size: 1.35rem; margin-top: 0; }
+.trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; padding: 2.6rem 1.25rem; max-width: 62rem; }
 .trois__col { border-top: 3px solid var(--accent); padding-top: 1rem; background: transparent; }
-.confiance { padding: 0 1.25rem 3rem; text-align: center; color: var(--encre-doux); }
-.confiance h2 { font-family: var(--serif); color: var(--encre); }
-.confiance a { color: var(--accent); }
+.trois__col h2 { font-family: var(--serif); font-size: 1.4rem; margin-top: 0; }
+.trois__col a { color: var(--lien); font-weight: 600; }
+.trois__col a:hover { color: var(--lien-hover); }
+.confiance { padding: 0 1.25rem 3.4rem; text-align: center; color: var(--encre-doux); }
+.confiance h2 { font-family: var(--serif); color: var(--encre); font-size: 1.6rem; }
+.confiance a { color: var(--lien); font-weight: 600; }
+.confiance a:hover { color: var(--lien-hover); }
 
 /* ---------- fiche ---------- */
 .fiche { padding-top: 2rem; padding-bottom: 3rem; }
 .fiche__fil { font-size: .88rem; color: var(--encre-doux); }
-.fiche__fil a { color: var(--accent); }
-.fiche__type { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--or); font-weight: 700; margin-bottom: .2rem; }
+.fiche__fil a { color: var(--lien); }
+.fiche__type { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--or-texte); font-weight: 700; margin-bottom: .2rem; }
 .fiche__nom {
   font-family: var(--serif);
   font-size: clamp(2.6rem, 8vw, 4.4rem);
   line-height: 1.05;
   margin: .2rem 0 1rem;
-  color: var(--accent);
+  color: var(--brand);
   overflow-wrap: break-word;
 }
 .fiche__sens { font-size: 1.12rem; max-width: 38rem; }
@@ -125,65 +149,67 @@ a:hover .carte__dept, a:focus .carte__dept { fill: var(--accent); }
 .brique {
   display: inline-flex; flex-direction: column; align-items: center;
   border: 1px solid var(--ligne); border-radius: var(--rayon);
-  padding: .55rem .9rem; background: #fff;
+  padding: .55rem .9rem; background: #FFFFFF;
   text-decoration: none; color: var(--encre);
   transition: border-color .15s ease, transform .15s ease;
 }
 a.brique:hover { border-color: var(--accent); transform: translateY(-2px); }
-.brique__surf { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+.brique__surf { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--lien); }
 .brique__sens { font-size: .82rem; color: var(--encre-doux); }
 .brique--reste { background: var(--papier-2); border-style: dashed; }
 .brique--reste .brique__surf { color: var(--encre-doux); }
-.brique__prob { color: var(--or); font-weight: 700; }
+.brique__prob { color: var(--or-texte); font-weight: 700; }
 .fiche__lien-decodeur { color: var(--encre-doux); font-size: .95rem; }
-.fiche__lien-decodeur a { color: var(--accent); }
+.fiche__lien-decodeur a { color: var(--lien); }
 .badge-source {
   display: inline-block;
-  background: var(--accent-clair); color: var(--accent);
+  background: var(--fond-info); color: var(--lien);
   border-radius: 999px; padding: .3rem 1rem; font-weight: 600; font-size: .95rem;
 }
 .fiche__source ul { padding-left: 1.2rem; }
-.fiche__source a { color: var(--accent); }
+.fiche__source a { color: var(--lien); }
 .bouton {
   font: inherit; font-weight: 600;
-  background: var(--accent); color: #fff;
+  background: var(--brand); color: var(--brand-encre);
   border: 0; border-radius: var(--rayon);
   padding: .7rem 1.4rem; cursor: pointer;
 }
-.bouton:hover { background: #0a3d47; }
-.bouton--second { background: transparent; color: var(--accent); border: 2px solid var(--accent); margin-left: .5rem; }
-.bouton--second:hover { background: var(--accent-clair); }
+.bouton:hover { background: #072F40; }
+.bouton--second { background: transparent; color: var(--lien); border: 2px solid var(--lien); margin-left: .5rem; }
+.bouton--second:hover { background: var(--fond-info); }
 .fiche__partage-statut { color: var(--encre-doux); font-size: .92rem; min-height: 1.4em; }
 
 /* ---------- decodeur ---------- */
 .prose h1, .prose h2 { font-family: var(--serif); }
+.prose a { color: var(--lien); }
 .brique-cartes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
-.brique-carte { border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 1rem 1.1rem; background: #fff; scroll-margin-top: 1rem; }
-.brique-carte:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-clair); }
-.brique-carte h3 { font-family: var(--serif); color: var(--accent); margin: 0 0 .3rem; font-size: 1.25rem; display: inline; }
+.brique-carte { border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 1rem 1.1rem; background: #FFFFFF; scroll-margin-top: 1rem; }
+.brique-carte:target { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(200, 150, 46, .35); }
+.brique-carte h3 { font-family: var(--serif); color: var(--brand); margin: 0 0 .3rem; font-size: 1.25rem; display: inline; }
 .brique-carte p { margin: .4rem 0; }
 .brique-carte__ex { font-size: .92rem; color: var(--encre-doux); }
-.brique-carte__note { font-size: .92rem; color: var(--or); }
+.brique-carte__note { font-size: .92rem; color: var(--or-texte); }
 .etiquette { text-transform: uppercase; letter-spacing: .1em; font-size: .7rem; font-weight: 700; color: var(--encre-doux); }
-.badge-probable { font-size: .75rem; background: #f3e6cf; color: var(--or); border-radius: 999px; padding: .15rem .6rem; font-weight: 700; vertical-align: middle; }
+.badge-probable { font-size: .75rem; background: var(--accent); color: var(--encre); border-radius: 999px; padding: .15rem .6rem; font-weight: 700; vertical-align: middle; }
 
 /* ---------- liste departements ---------- */
 .liste { columns: 2; column-gap: 2.5rem; padding-left: 1.1rem; }
 .liste li { break-inside: avoid; margin-bottom: .3rem; }
 .liste a { color: var(--encre); }
-.liste__br { font-family: var(--serif); color: var(--accent); }
+.liste__br { font-family: var(--serif); color: var(--lien); }
 
-/* ---------- pied ---------- */
-.pied { border-top: 1px solid var(--ligne); margin-top: 3rem; background: var(--papier-2); }
-.pied__grille { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; gap: 1.5rem; padding-top: 1.6rem; padding-bottom: 1.6rem; font-size: .92rem; }
-.pied a { color: var(--accent); }
-.pied__sources { color: var(--encre-doux); }
+/* ---------- pied (mer profonde) ---------- */
+.pied { border-top: 1px solid var(--ligne); margin-top: 3rem; background: var(--brand); color: var(--brand-encre); }
+.pied__grille { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; gap: 1.5rem; padding-top: 1.7rem; padding-bottom: 1.7rem; font-size: .92rem; }
+.pied a { color: var(--brand-encre); }
+.pied a:hover { color: var(--accent); }
+.pied__sources { color: var(--brand-doux); }
 
 @media (max-width: 700px) {
   .trois { grid-template-columns: 1fr; }
   .brique-cartes { grid-template-columns: 1fr; }
   .liste { columns: 1; }
   .pied__grille { grid-template-columns: 1fr; }
-  .hero { padding-top: 2.2rem; }
+  .hero { padding-top: 2.4rem; }
   .bouton--second { margin-left: 0; margin-top: .6rem; }
 }
