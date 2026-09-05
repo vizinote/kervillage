@@ -1,0 +1,189 @@
+/* Kervillage — charte Brozapi (D21) : sobre, premium, patte humaine, zero folklore */
+:root {
+  --papier: #f7f3ea;
+  --papier-2: #efe9db;
+  --encre: #1d2a26;
+  --encre-doux: #4c5a54;
+  --accent: #0e4f5c;
+  --accent-clair: #d7e5e2;
+  --or: #a5772a;
+  --ligne: #d9d1bf;
+  --rayon: 10px;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--encre);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+}
+.cadre { max-width: 46rem; margin: 0 auto; padding: 0 1.25rem; }
+.skip {
+  position: absolute; left: -999px;
+}
+.skip:focus { left: 1rem; top: 1rem; background: var(--encre); color: var(--papier); padding: .5rem 1rem; z-index: 10; }
+
+/* ---------- entete ---------- */
+.entete { border-bottom: 1px solid var(--ligne); background: var(--papier); }
+.entete .cadre { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; padding-top: 1rem; padding-bottom: 1rem; }
+.marque { text-decoration: none; color: var(--encre); }
+.marque__nom { font-family: var(--serif); font-size: 1.45rem; font-weight: 700; letter-spacing: .01em; }
+.marque__nom::first-letter { color: var(--accent); }
+.marque__sig { color: var(--encre-doux); font-size: .92rem; margin-left: .35rem; }
+.nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
+.nav a { color: var(--encre-doux); text-decoration: none; font-size: .95rem; border-bottom: 2px solid transparent; padding-bottom: 2px; }
+.nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------- hero ---------- */
+.hero { padding: 3.2rem 1.25rem 2rem; text-align: center; }
+.hero__titre {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 7vw, 4rem);
+  line-height: 1.08;
+  margin: 0 0 1rem;
+  font-weight: 700;
+}
+.hero__sous { max-width: 34rem; margin: 0 auto 2.2rem; color: var(--encre-doux); font-size: 1.08rem; }
+.hero__stats { margin-top: 1.6rem; color: var(--encre-doux); font-size: .92rem; }
+
+/* ---------- recherche ---------- */
+.recherche { position: relative; max-width: 34rem; margin: 0 auto; text-align: left; }
+.recherche__label { display: block; font-weight: 600; margin-bottom: .45rem; }
+.recherche__champ {
+  width: 100%;
+  font-size: 1.15rem;
+  padding: .85rem 1rem;
+  border: 2px solid var(--encre);
+  border-radius: var(--rayon);
+  background: #fff;
+  color: var(--encre);
+  font-family: var(--sans);
+}
+.recherche__champ:focus { outline: 3px solid var(--accent-clair); border-color: var(--accent); }
+.recherche__aide { font-size: .85rem; color: var(--encre-doux); margin: .4rem 0 0; }
+.recherche__resultats {
+  position: absolute; left: 0; right: 0; top: 100%;
+  margin: .35rem 0 0; padding: 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--ligne);
+  border-radius: var(--rayon);
+  box-shadow: 0 10px 30px rgba(29, 42, 38, .12);
+  overflow: hidden;
+  z-index: 5;
+}
+.recherche__resultats li { border-top: 1px solid var(--ligne); }
+.recherche__resultats li:first-child { border-top: 0; }
+.recherche__resultats a {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: .65rem 1rem; text-decoration: none; color: var(--encre);
+}
+.recherche__resultats a:hover, .recherche__resultats a[aria-selected="true"] { background: var(--accent-clair); }
+.recherche__resultats .res__fr { font-weight: 600; }
+.recherche__resultats .res__br { font-family: var(--serif); color: var(--accent); }
+.recherche__resultats .res__meta { font-size: .8rem; color: var(--encre-doux); white-space: nowrap; }
+
+/* ---------- carte ---------- */
+.carte-section { padding: 2.5rem 1.25rem 1rem; text-align: center; }
+.carte-section h2 { font-family: var(--serif); }
+.carte-wrap { max-width: 30rem; margin: 0 auto; }
+.carte { width: 100%; height: auto; }
+.carte__dept { fill: var(--accent-clair); stroke: var(--accent); stroke-width: 1.4; transition: fill .15s ease; }
+a:hover .carte__dept, a:focus .carte__dept { fill: var(--accent); }
+.dept-liens { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: center; list-style: none; padding: 0; margin: 1.2rem 0 0; }
+.dept-liens a { color: var(--accent); }
+
+/* ---------- trois colonnes ---------- */
+.trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; padding: 2.5rem 1.25rem; max-width: 62rem; }
+.trois__col h2 { font-family: var(--serif); font-size: 1.35rem; margin-top: 0; }
+.trois__col { border-top: 3px solid var(--accent); padding-top: 1rem; background: transparent; }
+.confiance { padding: 0 1.25rem 3rem; text-align: center; color: var(--encre-doux); }
+.confiance h2 { font-family: var(--serif); color: var(--encre); }
+.confiance a { color: var(--accent); }
+
+/* ---------- fiche ---------- */
+.fiche { padding-top: 2rem; padding-bottom: 3rem; }
+.fiche__fil { font-size: .88rem; color: var(--encre-doux); }
+.fiche__fil a { color: var(--accent); }
+.fiche__type { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--or); font-weight: 700; margin-bottom: .2rem; }
+.fiche__nom {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 8vw, 4.4rem);
+  line-height: 1.05;
+  margin: .2rem 0 1rem;
+  color: var(--accent);
+  overflow-wrap: break-word;
+}
+.fiche__sens { font-size: 1.12rem; max-width: 38rem; }
+.fiche h2 { font-family: var(--serif); font-size: 1.35rem; margin: 2.4rem 0 .8rem; }
+.briques { display: flex; flex-wrap: wrap; gap: .6rem; }
+.brique {
+  display: inline-flex; flex-direction: column; align-items: center;
+  border: 1px solid var(--ligne); border-radius: var(--rayon);
+  padding: .55rem .9rem; background: #fff;
+  text-decoration: none; color: var(--encre);
+  transition: border-color .15s ease, transform .15s ease;
+}
+a.brique:hover { border-color: var(--accent); transform: translateY(-2px); }
+.brique__surf { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+.brique__sens { font-size: .82rem; color: var(--encre-doux); }
+.brique--reste { background: var(--papier-2); border-style: dashed; }
+.brique--reste .brique__surf { color: var(--encre-doux); }
+.brique__prob { color: var(--or); font-weight: 700; }
+.fiche__lien-decodeur { color: var(--encre-doux); font-size: .95rem; }
+.fiche__lien-decodeur a { color: var(--accent); }
+.badge-source {
+  display: inline-block;
+  background: var(--accent-clair); color: var(--accent);
+  border-radius: 999px; padding: .3rem 1rem; font-weight: 600; font-size: .95rem;
+}
+.fiche__source ul { padding-left: 1.2rem; }
+.fiche__source a { color: var(--accent); }
+.bouton {
+  font: inherit; font-weight: 600;
+  background: var(--accent); color: #fff;
+  border: 0; border-radius: var(--rayon);
+  padding: .7rem 1.4rem; cursor: pointer;
+}
+.bouton:hover { background: #0a3d47; }
+.bouton--second { background: transparent; color: var(--accent); border: 2px solid var(--accent); margin-left: .5rem; }
+.bouton--second:hover { background: var(--accent-clair); }
+.fiche__partage-statut { color: var(--encre-doux); font-size: .92rem; min-height: 1.4em; }
+
+/* ---------- decodeur ---------- */
+.prose h1, .prose h2 { font-family: var(--serif); }
+.brique-cartes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+.brique-carte { border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 1rem 1.1rem; background: #fff; scroll-margin-top: 1rem; }
+.brique-carte:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-clair); }
+.brique-carte h3 { font-family: var(--serif); color: var(--accent); margin: 0 0 .3rem; font-size: 1.25rem; display: inline; }
+.brique-carte p { margin: .4rem 0; }
+.brique-carte__ex { font-size: .92rem; color: var(--encre-doux); }
+.brique-carte__note { font-size: .92rem; color: var(--or); }
+.etiquette { text-transform: uppercase; letter-spacing: .1em; font-size: .7rem; font-weight: 700; color: var(--encre-doux); }
+.badge-probable { font-size: .75rem; background: #f3e6cf; color: var(--or); border-radius: 999px; padding: .15rem .6rem; font-weight: 700; vertical-align: middle; }
+
+/* ---------- liste departements ---------- */
+.liste { columns: 2; column-gap: 2.5rem; padding-left: 1.1rem; }
+.liste li { break-inside: avoid; margin-bottom: .3rem; }
+.liste a { color: var(--encre); }
+.liste__br { font-family: var(--serif); color: var(--accent); }
+
+/* ---------- pied ---------- */
+.pied { border-top: 1px solid var(--ligne); margin-top: 3rem; background: var(--papier-2); }
+.pied__grille { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr; gap: 1.5rem; padding-top: 1.6rem; padding-bottom: 1.6rem; font-size: .92rem; }
+.pied a { color: var(--accent); }
+.pied__sources { color: var(--encre-doux); }
+
+@media (max-width: 700px) {
+  .trois { grid-template-columns: 1fr; }
+  .brique-cartes { grid-template-columns: 1fr; }
+  .liste { columns: 1; }
+  .pied__grille { grid-template-columns: 1fr; }
+  .hero { padding-top: 2.2rem; }
+  .bouton--second { margin-left: 0; margin-top: .6rem; }
+}

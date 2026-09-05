@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kervillage.brozapi.com/sitemap.xml

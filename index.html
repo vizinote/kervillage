@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kervillage — ton village en breton</title>
+<meta name="description" content="Le nom breton officiel de ta commune, sa signification et un décodeur pour lire les panneaux de Bretagne. Gratuit et sourcé.">
+<!-- noindex temporaire : le lancement public est un verrou Franck (a retirer au GO) -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://kervillage.brozapi.com/">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kervillage">
+<meta property="og:title" content="Kervillage — ton village en breton">
+<meta property="og:description" content="Le nom breton officiel de ta commune, sa signification et un décodeur pour lire les panneaux de Bretagne. Gratuit et sourcé.">
+<meta property="og:url" content="https://kervillage.brozapi.com/">
+<meta property="og:image" content="https://kervillage.brozapi.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="entete">
+  <div class="cadre">
+    <a class="marque" href="/"><span class="marque__nom">Kervillage</span> <span class="marque__sig">ton village en breton</span></a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="/">Accueil</a>
+      <a href="/decodeur.html">Décodeur</a>
+      <a href="/pourquoi.html">Pourquoi ce site</a>
+      <a href="/sources.html">Sources</a>
+    </nav>
+  </div>
+</header>
+<main id="contenu">
+
+<section class="cadre hero">
+  <h1 class="hero__titre">Ton village<br>en breton</h1>
+  <p class="hero__sous">Le nom breton officiel de ta commune, ce qu'il signifie,
+  et la clé pour lire les panneaux de Bretagne. Gratuit, sourcé, sans compte.</p>
+  
+<div class="recherche" role="search">
+  <label class="recherche__label" for="champ">Tape le nom de ta commune</label>
+  <input id="champ" class="recherche__champ" type="search" autocomplete="off"
+         placeholder="Rennes, Plougastel, Kemper…" aria-describedby="aide-recherche">
+  <p id="aide-recherche" class="recherche__aide">Français ou breton, avec ou sans accents.</p>
+  <ul id="resultats" class="recherche__resultats" role="listbox" hidden></ul>
+</div>
+<script src="/assets/search-core.js"></script>
+<script src="/assets/app.js"></script>
+
+  <p class="hero__stats">1 531 communes et 28 416 lieux-dits couverts
+  dans les cinq départements de Bretagne historique.</p>
+</section>
+<section class="cadre carte-section">
+  <h2>Les cinq départements</h2>
+  <div class="carte-wrap"><svg viewBox="0 0 640 560" class="carte" role="img" aria-label="Carte des cinq départements de Bretagne historique"><a href="/d/22-cotes-d-armor.html" aria-label="Côtes-d&#x27;Armor"><path d="M228.1,152.0L239.4,149.7L238.9,139.5L243.9,132.8L239.0,127.8L239.9,124.0L246.1,120.9L245.2,116.5L247.8,115.0L255.9,116.5L261.3,122.1L276.9,113.4L285.8,113.8L292.0,107.1L294.4,114.0L310.2,106.9L311.8,115.6L321.9,116.7L323.0,121.5L317.3,124.2L334.2,131.5L331.9,138.7L349.1,153.9L350.1,166.3L364.6,174.5L367.8,185.3L371.1,184.2L370.2,179.8L377.7,180.9L387.9,167.8L397.3,162.9L401.3,154.1L409.4,155.9L423.6,148.8L426.5,151.9L420.2,160.6L424.0,162.4L431.0,155.4L439.5,169.4L443.8,170.0L446.5,167.4L445.2,163.9L451.3,163.9L455.9,170.8L462.8,172.6L462.6,177.0L468.3,172.2L473.3,179.0L480.2,176.7L482.3,182.8L480.4,195.0L476.3,201.9L478.5,203.9L476.9,214.9L479.6,219.7L474.1,220.6L475.9,226.2L467.3,234.3L461.6,230.3L453.3,240.1L442.1,241.5L442.5,248.7L437.4,251.1L436.6,257.9L427.5,265.9L415.2,268.3L410.1,258.5L404.0,257.4L391.7,260.9L394.2,267.2L389.4,273.4L389.6,278.3L378.0,287.6L371.8,284.0L374.3,269.3L372.1,266.1L359.1,270.9L351.6,263.2L345.6,264.3L332.7,257.7L325.7,260.3L318.0,250.9L304.9,251.9L303.6,259.4L292.6,262.8L284.3,264.6L273.8,258.1L263.9,263.0L260.4,261.2L262.6,257.7L241.8,254.7L245.6,250.2L242.8,245.4L248.6,233.8L242.9,222.2L243.3,213.0L235.8,211.1L236.6,203.5L242.0,199.6L236.0,187.5L243.4,180.0L241.0,174.4L237.6,174.7L238.1,168.6L230.7,165.6L228.1,152.0Z" class="carte__dept"><title>Côtes-d&#x27;Armor</title></path></a><a href="/d/29-finistere.html" aria-label="Finistère"><path d="M228.1,152.0L230.7,165.6L238.1,168.6L237.6,174.7L241.0,174.4L243.4,180.0L236.0,187.5L242.0,199.6L236.6,203.5L235.8,211.1L243.3,213.0L242.9,222.2L248.6,233.8L242.8,245.4L245.6,250.2L219.9,264.1L217.2,270.5L222.4,281.4L225.7,282.1L230.8,298.1L243.2,296.4L256.6,306.1L263.9,300.5L267.6,311.1L264.8,312.9L265.2,323.9L258.6,324.9L252.9,333.1L247.8,327.6L245.4,330.4L247.9,337.8L245.6,346.4L224.9,343.3L216.9,337.0L213.1,340.3L200.1,339.1L181.5,315.5L181.7,326.6L172.5,328.4L160.2,324.4L154.7,327.6L153.0,321.8L149.8,325.0L155.3,331.4L151.9,338.2L125.8,339.2L123.3,333.5L127.6,331.6L127.5,325.9L116.9,303.0L99.9,292.2L96.4,295.0L86.4,288.6L76.8,288.9L74.3,281.4L124.0,271.0L133.8,275.6L139.0,266.1L134.4,252.7L111.2,243.3L105.5,245.0L97.9,258.6L96.5,244.6L99.3,242.6L97.6,238.9L90.3,238.4L96.1,232.9L94.1,225.7L98.0,221.5L98.1,231.1L100.7,233.3L116.9,231.7L122.6,235.3L133.7,230.5L140.4,234.3L146.0,230.7L130.7,226.7L132.5,222.1L125.1,220.4L123.9,224.2L114.2,224.1L113.9,219.3L119.9,210.4L116.7,208.7L90.0,221.7L79.8,217.9L75.6,222.9L66.2,223.6L67.8,214.1L62.9,205.4L68.1,193.0L65.5,185.9L72.2,174.3L89.8,170.1L96.6,165.3L97.4,159.8L115.7,157.2L127.6,148.3L145.9,154.4L151.3,146.1L170.1,145.5L180.9,137.5L183.3,138.9L182.9,148.5L185.8,153.4L192.5,150.9L200.9,159.0L199.6,146.1L204.5,142.9L228.0,144.3L230.4,149.2L228.1,152.0Z" class="carte__dept"><title>Finistère</title></path></a><a href="/d/35-ille-et-vilaine.html" aria-label="Ille-et-Vilaine"><path d="M476.9,178.1L465.5,153.7L473.7,146.2L485.2,143.4L493.1,147.3L488.0,154.6L491.9,161.3L502.2,164.1L531.7,159.1L539.3,172.1L537.2,176.1L543.5,188.8L549.4,189.6L552.3,194.7L564.6,192.4L566.9,187.4L574.1,184.6L575.1,179.2L584.7,177.4L604.5,184.7L605.2,197.1L602.7,200.9L608.2,223.9L600.0,238.2L607.5,275.5L611.4,280.0L609.7,287.6L611.6,296.0L592.3,302.3L579.0,343.3L562.3,338.6L558.0,332.1L547.1,330.8L546.9,336.6L525.1,346.0L519.4,357.7L489.1,358.4L475.9,366.1L473.8,362.5L455.2,374.8L450.2,355.1L460.8,351.7L457.0,346.4L450.7,346.6L464.1,331.3L461.8,325.5L456.1,328.9L452.4,320.7L457.8,312.4L448.4,298.5L428.2,296.9L428.7,289.2L434.1,283.5L444.5,281.1L442.1,277.4L432.2,280.7L432.2,271.2L427.5,265.9L436.6,257.9L437.4,251.1L442.5,248.7L442.1,241.5L453.3,240.1L461.6,230.3L467.3,234.3L475.9,226.2L474.1,220.6L479.6,219.7L476.9,214.9L478.5,203.9L476.3,201.9L480.4,195.0L482.3,182.8L480.2,176.7L476.9,178.1Z" class="carte__dept"><title>Ille-et-Vilaine</title></path></a><a href="/d/44-loire-atlantique.html" aria-label="Loire-Atlantique"><path d="M402.6,414.5L407.8,408.3L411.2,412.8L423.8,411.0L425.8,403.2L431.3,400.3L433.8,404.7L441.6,400.7L442.7,405.1L446.9,404.1L446.6,398.5L455.0,395.9L454.2,383.9L457.0,377.0L455.2,374.8L458.5,370.4L489.1,358.4L519.4,357.7L525.1,346.0L546.9,336.6L547.1,330.8L558.0,332.1L562.3,338.6L579.0,343.3L580.5,347.6L577.7,352.7L586.4,355.3L589.3,361.1L588.2,366.9L594.7,377.3L613.7,384.0L607.1,389.5L608.3,402.1L619.5,404.9L622.0,424.1L618.4,431.2L590.4,432.4L565.9,442.5L564.7,446.4L574.0,447.9L578.1,457.8L588.4,459.5L587.4,464.0L591.0,471.5L580.2,482.4L581.9,485.8L579.5,489.7L590.0,491.5L597.9,498.1L597.7,503.0L585.6,503.0L575.7,493.3L571.9,503.1L559.7,505.0L561.9,510.5L559.8,513.6L562.5,515.8L560.5,522.0L548.1,527.7L545.5,505.3L542.1,502.9L534.0,508.3L535.8,511.0L534.1,516.4L541.9,536.8L535.0,542.0L510.0,536.7L505.5,526.9L493.9,526.4L493.8,521.7L481.3,517.1L481.4,513.5L477.6,512.8L461.5,491.3L436.3,483.3L436.4,478.7L445.0,475.7L446.3,466.4L442.1,450.8L425.5,460.4L415.6,451.5L405.0,455.2L394.6,450.0L396.2,440.4L388.0,430.5L403.8,419.5L402.6,414.5Z" class="carte__dept"><title>Loire-Atlantique</title></path></a><a href="/d/56-morbihan.html" aria-label="Morbihan"><path d="M247.8,327.6L252.9,333.1L258.6,324.9L265.2,323.9L266.9,304.3L263.9,300.5L253.9,305.4L251.6,300.0L243.2,296.4L230.8,298.1L225.7,282.1L218.3,274.3L219.9,264.1L241.8,254.7L254.2,254.6L262.6,257.7L260.4,261.2L263.9,263.0L273.8,258.1L284.3,264.6L303.6,259.4L304.9,251.9L318.0,250.9L325.7,260.3L332.7,257.7L345.6,264.3L351.6,263.2L359.1,270.9L372.1,266.1L374.3,269.3L371.8,284.0L378.0,287.6L389.6,278.3L389.4,273.4L394.2,267.2L391.7,260.9L404.0,257.4L410.1,258.5L415.2,268.3L427.5,265.9L432.2,271.2L432.2,280.7L442.1,277.4L444.5,281.1L434.1,283.5L428.7,289.2L428.2,296.9L448.4,298.5L457.8,312.4L452.4,320.7L456.1,328.9L461.8,325.5L464.1,331.3L450.7,346.6L457.0,346.4L460.8,351.7L450.2,355.1L451.5,363.7L454.1,365.0L452.7,370.9L457.0,377.0L454.2,383.9L455.0,395.9L446.6,398.5L446.9,404.1L442.7,405.1L441.6,400.7L433.8,404.7L431.3,400.3L425.8,403.2L423.8,411.0L411.2,412.8L407.8,408.3L399.6,415.6L396.4,405.6L405.2,404.1L394.0,397.6L381.6,399.8L381.5,396.6L374.5,394.7L370.3,404.2L365.3,402.1L353.7,406.3L345.8,403.6L342.0,395.8L336.5,394.0L337.1,390.3L341.0,389.7L344.0,394.4L352.2,391.4L358.5,395.4L362.6,392.0L365.4,383.1L359.2,378.8L359.6,373.8L345.5,377.5L340.1,380.8L339.3,385.5L333.1,382.4L323.2,388.9L320.1,385.1L306.0,388.2L304.5,396.3L310.2,407.1L305.1,409.0L301.8,402.5L303.6,386.0L293.4,372.8L296.2,363.7L299.7,364.2L305.6,354.9L298.3,352.4L298.6,359.5L292.3,367.0L292.6,371.8L282.0,359.7L274.3,358.1L273.2,353.7L267.6,359.5L258.1,361.0L248.1,347.4L248.7,337.2L245.6,330.5L247.8,327.6Z" class="carte__dept"><title>Morbihan</title></path></a></svg></div>
+  <ul class="dept-liens">
+    <li><a href="/d/22-cotes-d-armor.html">Côtes-d&#x27;Armor</a></li><li><a href="/d/29-finistere.html">Finistère</a></li><li><a href="/d/35-ille-et-vilaine.html">Ille-et-Vilaine</a></li><li><a href="/d/44-loire-atlantique.html">Loire-Atlantique</a></li><li><a href="/d/56-morbihan.html">Morbihan</a></li>
+  </ul>
+</section>
+<section class="cadre trois">
+  <div class="trois__col">
+    <h2>Cherche</h2>
+    <p>Tape « Rennes », tu trouves <em lang="br">Roazhon</em>. Tape « Kemper », tu tombes sur Quimper.
+    La recherche pardonne les accents et les fautes de frappe.</p>
+  </div>
+  <div class="trois__col">
+    <h2>Comprends</h2>
+    <p>Chaque nom se décompose en briques : <em lang="br">plou</em> la paroisse, <em lang="br">ker</em> le village,
+    <em lang="br">loc</em> le lieu consacré. Trente briques suffisent pour lire la plupart des panneaux.</p>
+    <p><a href="/decodeur.html">Ouvrir le décodeur</a></p>
+  </div>
+  <div class="trois__col">
+    <h2>Partage</h2>
+    <p>Sur chaque fiche, un bouton génère une image du nom breton, prête pour les réseaux.
+    Le breton gagne à être montré.</p>
+  </div>
+</section>
+<section class="cadre confiance">
+  <h2>Rien d'inventé</h2>
+  <p>Chaque nom affiché vient d'OpenStreetMap, de Wikidata ou de Wikipédia en breton, et la source
+  est écrite sur la fiche. Aucun texte n'est généré automatiquement. La méthode complète est sur la
+  page <a href="/sources.html">Sources et méthode</a>.</p>
+</section>
+
+</main>
+<footer class="pied">
+  <div class="cadre pied__grille">
+    <div>
+      <p><strong>Kervillage</strong> — ton village en breton.<br>Un outil gratuit du studio <a href="https://brozapi.com">Brozapi</a>.</p>
+    </div>
+    <div>
+      <p><a href="/decodeur.html">Lire un panneau breton</a></p>
+      <p><a href="/pourquoi.html">Pourquoi ce site</a></p>
+      <p><a href="/sources.html">Sources et méthode</a></p>
+      <p><a href="/mentions-legales.html">Mentions légales</a></p>
+    </div>
+    <div>
+      <p class="pied__sources">Noms bretons : © les contributeurs d'OpenStreetMap (ODbL), Wikidata (CC0), Wikipédia en breton (CC BY-SA).</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
