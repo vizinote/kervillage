@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relecture — Kervillage</title>
+<!-- page privee de relecture : noindex volontaire et permanent, hors sitemap, non liee -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+/* ---------- interface de relecture (palette Glaz & Ajonc) ---------- */
+.rel-hero { background: var(--brand); color: var(--brand-encre); padding: 2.6rem 1.25rem 2.2rem; }
+.rel-hero .cadre { max-width: 46rem; }
+.rel-hero h1 { font-family: var(--serif); font-size: clamp(2rem, 6vw, 2.8rem); margin: 0 0 1rem; }
+.rel-hero p { color: var(--brand-encre); max-width: 40rem; }
+.rel-hero .rel-regle { width: 3.5rem; height: 3px; background: var(--accent); margin: 0 0 1.2rem; border: 0; }
+.rel-attentes { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: var(--rayon); padding: 1rem 1.25rem; margin: 1.4rem 0 0; }
+.rel-attentes ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+.rel-attentes li { margin: .35rem 0; }
+.rel-attentes strong { color: #FFFFFF; }
+
+.rel-progress { position: sticky; top: 0; z-index: 6; background: var(--papier); border-bottom: 1px solid var(--ligne); padding: .6rem 1.25rem; }
+.rel-progress .cadre { display: flex; align-items: center; gap: 1rem; }
+.rel-progress__barre { flex: 1; height: 8px; background: var(--papier-2); border-radius: 99px; overflow: hidden; }
+.rel-progress__rempli { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+.rel-progress__txt { font-size: .9rem; color: var(--encre-doux); white-space: nowrap; }
+
+.rel-titre { font-family: var(--serif); font-size: 1.7rem; margin: 3rem 0 .3rem; border-top: 3px solid var(--accent); padding-top: 1.2rem; }
+.rel-consigne { color: var(--encre-doux); margin-top: 0; }
+.rel-soustitre { font-family: var(--serif); font-size: 1.25rem; margin: 2rem 0 .8rem; }
+
+.rel-bloc { background: #FFFFFF; border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 1.1rem 1.25rem; margin: 1rem 0; }
+.rel-bloc--ok { border-color: #2E7D4F; box-shadow: inset 4px 0 0 #2E7D4F; }
+.rel-bloc--corr { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.rel-bloc__texte h3 { margin-top: 0; }
+.rel-bloc__texte > :last-child { margin-bottom: 0; }
+.rel-bloc__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .9rem; }
+.rel-btn { font: inherit; font-size: .95rem; border-radius: 99px; padding: .55rem 1.1rem; cursor: pointer; border: 2px solid transparent; min-height: 44px; }
+.rel-btn--ok { background: var(--brand); color: var(--brand-encre); }
+.rel-btn--ok[aria-pressed="true"] { background: #2E7D4F; color: #FFFFFF; }
+.rel-btn--corr { background: transparent; color: var(--lien); border-color: var(--lien); }
+.rel-btn--corr[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--encre); }
+.rel-corr { display: none; width: 100%; margin-top: .8rem; font: inherit; font-size: 1rem; padding: .7rem .9rem; border: 2px solid var(--brand); border-radius: var(--rayon); background: var(--papier); color: var(--encre); }
+.rel-corr.is-visible { display: block; }
+.rel-etat { margin: .5rem 0 0; font-size: .88rem; color: #2E7D4F; min-height: 1.2em; }
+
+.rel-final { background: #FFFFFF; border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 1.1rem 1.25rem; margin: 1rem 0; }
+.rel-final fieldset { border: 0; margin: 0; padding: 0; }
+.rel-final legend { font-weight: 600; margin-bottom: .6rem; }
+.rel-choix { display: block; border: 1px solid var(--ligne); border-radius: var(--rayon); padding: .7rem 1rem; margin: .5rem 0; cursor: pointer; }
+.rel-choix:has(input:checked) { border-color: var(--accent); background: #FBF3DF; }
+.rel-choix input { margin-right: .5rem; }
+.rel-mot { width: 100%; font: inherit; font-size: 1rem; padding: .7rem .9rem; border: 2px solid var(--brand); border-radius: var(--rayon); background: var(--papier); color: var(--encre); margin-top: .4rem; }
+
+.rel-envoi { background: var(--fond-info); border-radius: var(--rayon); padding: 1.4rem 1.25rem; margin: 1rem 0 3rem; }
+.rel-envoi__actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+.rel-btn--grand { background: var(--brand); color: var(--brand-encre); border: 0; font-size: 1.05rem; padding: .8rem 1.6rem; border-radius: 99px; cursor: pointer; min-height: 48px; text-decoration: none; display: inline-block; }
+.rel-btn--copie { background: var(--accent); color: var(--encre); border: 0; font-size: 1.05rem; padding: .8rem 1.6rem; border-radius: 99px; cursor: pointer; min-height: 48px; }
+.rel-sortie { display: none; margin-top: 1.2rem; }
+.rel-sortie.is-visible { display: block; }
+.rel-sortie textarea { width: 100%; font: inherit; font-size: .92rem; padding: .8rem; border: 1px solid var(--ligne); border-radius: var(--rayon); background: #FFFFFF; color: var(--encre); }
+.rel-note { font-size: .9rem; color: var(--encre-doux); }
+.rel-note--trop-long { color: var(--or-texte); font-weight: 600; }
+.rel-reset { background: none; border: 0; color: var(--encre-doux); text-decoration: underline; cursor: pointer; font-size: .85rem; padding: 0; }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="entete">
+  <div class="cadre">
+    <span class="marque"><span class="marque__hermine" aria-hidden="true"><svg width="24" height="30" viewBox="0 0 16 20" fill="none"><circle cx="4.6" cy="4" r="1.5" fill="currentColor"/><circle cx="11.4" cy="4" r="1.5" fill="currentColor"/><circle cx="8" cy="8" r="1.7" fill="currentColor"/><path d="M8 11c-1.4 1.6-1.4 5-1.4 7 0 .7 1.4 1.3 1.4.7-.05.6 1.4 0 1.4-.7 0-2 0-5.4-1.4-7z" fill="currentColor"/></svg></span><span class="marque__nom">Kervillage</span> <span class="marque__sig">relecture</span></span>
+  </div>
+</header>
+<div class="filet" aria-hidden="true"></div>
+
+<div class="rel-hero">
+  <div class="cadre">
+    <hr class="rel-regle">
+    <h1>Merci Enora&nbsp;!</h1>
+    <p>Tu connais Kervillage, le petit site qui explique les noms de communes en breton.
+       Avant de le montrer au monde, j'aimerais qu'une vraie brittophone le lise — et cette
+       brittophone, c'est toi.</p>
+    <div class="rel-attentes">
+      <strong>Ce que je te demande :</strong>
+      <ul>
+        <li>Vérifier <strong>l'exactitude du breton</strong> : les formes, les mutations, les accords, le dialecte.</li>
+        <li>Vérifier <strong>le ton</strong> : est-ce que ça sonne juste et sobre, sans folklore&nbsp;?</li>
+      </ul>
+      <p style="margin:.8rem 0 0">Pas besoin de relire l'orthographe du français ni le design.
+      Compte une vingtaine de minutes, à ton rythme : tu peux fermer la page et revenir plus tard,
+      tes réponses restent enregistrées dans ton navigateur.</p>
+    </div>
+  </div>
+</div>
+
+<div class="rel-progress" aria-hidden="false">
+  <div class="cadre">
+    <div class="rel-progress__barre"><div class="rel-progress__rempli" id="rel-rempli"></div></div>
+    <span class="rel-progress__txt" id="rel-compteur">0 / 44 blocs relus</span>
+    <button type="button" class="rel-reset" id="rel-reset">tout effacer</button>
+  </div>
+</div>
+
+<main id="contenu">
+<div class="cadre">
+
+<h2 class="rel-titre">1. Le décodeur — les trente briques</h2>
+<p class="rel-consigne">C'est le cœur du site. Pour chaque brique : le sens est-il juste, les exemples sont-ils corrects, les formes bretonnes entre parenthèses sont-elles bien orthographiées&nbsp;?</p>
+<section class="rel-bloc" data-bloc="dec-intro" data-label="Introduction du décodeur" data-court="Intro du décodeur">
+  <div class="rel-bloc__texte"><h1>Lire un panneau breton</h1>
+<p>La plupart des noms de communes de Bretagne se construisent avec un petit nombre de briques. Une fois ces trente repérées, un panneau cesse d'être une suite de syllabes : il se lit comme une phrase. « Plougastel », c'est la paroisse du château. « Locronan », le lieu consacré de Ronan.</p>
+<p>Deux règles de lecture avant de commencer :</p>
+<ul>
+<li>L'orthographe varie. Un même élément s'écrit Plou-, Plo-, Plu- ou Plé- selon l'endroit et l'époque. On donne à chaque fois la racine et ses formes courantes.</li>
+<li>Quand une étymologie fait débat, c'est écrit. Ce site préfère « probablement » à une certitude inventée.</li>
+</ul>
+<p>La forme bretonne du nom est donnée entre parenthèses quand elle est officielle.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Introduction du décodeur"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<h3 class="rel-soustitre">En tête de nom</h3>
+<section class="rel-bloc" data-bloc="brique-plou" data-label="Plou- (Plo-, Plu-, Plé-, Pleu-)" data-court="brique Plou-">
+  <div class="rel-bloc__texte"><h3 lang="br">Plou- (Plo-, Plu-, Plé-, Pleu-)</h3>
+  <p>Paroisse, au sens de « paroisse primitive » (du latin <em>plebs</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Plougastel-Daoulas (Plougastell-Daoulaz), Plouhinec, Ploërmel (Ploermael).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Plou- (Plo-, Plu-, Plé-, Pleu-)"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-ker" data-label="Ker-" data-court="brique Ker-">
+  <div class="rel-bloc__texte"><h3 lang="br">Ker-</h3>
+  <p>Village, hameau, lieu habité (du breton <em>kêr</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Kergrist, Kerlouan, Kersaint-Plabennec.</p>
+  <p class="brique-carte__note">Quimper ne commence pas par Ker-. Sa forme bretonne, Kemper, vient d'un autre mot (voir plus bas).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Ker-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-lan" data-label="Lan-" data-court="brique Lan-">
+  <div class="rel-bloc__texte"><h3 lang="br">Lan-</h3>
+  <p>Ermitage, terre consacrée (du breton <em>lann</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Lannion (Lannuon), Landivisiau (Landivizio), Lanester (Lannarstêr).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Lan-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-tre" data-label="Tre-" data-court="brique Tre-">
+  <div class="rel-bloc__texte"><h3 lang="br">Tre-</h3>
+  <p>Trève, ancienne subdivision de paroisse (du breton <em>trev</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Trégastel (Tregastell), Trébeurden (Trebeurden), Trégunc (Tregon).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Tre-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-loc" data-label="Loc- / Lok-" data-court="brique Loc- / Lok-">
+  <div class="rel-bloc__texte"><h3 lang="br">Loc- / Lok-</h3>
+  <p>Lieu consacré, ermitage (du breton <em>lok</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Locronan (Lokorn), Locmaria (Lokmaria), Locminé (Logunec'h).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Loc- / Lok-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-gwik" data-label="Gwik- / Gui-" data-court="brique Gwik- / Gui-">
+  <div class="rel-bloc__texte"><h3 lang="br">Gwik- / Gui-</h3>
+  <p>Bourg (du breton <em>gwik</em>, lui-même du latin <em>vicus</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Guipavas (Gwipavaz), Guissény (Gwiseni), Guimiliau (Gwimilio).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Gwik- / Gui-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-gwen" data-label="Gwen- / Gueng-" data-court="brique Gwen- / Gueng-">
+  <div class="rel-bloc__texte"><h3 lang="br">Gwen- / Gueng-</h3>
+  <p>Blanc (du breton <em>gwenn</em>) ; dans les noms de lieux, souvent entendu comme « béni, saint ».</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Guingamp (Gwengamp, « le champ blanc »), Guérande (Gwenrann, « le pays blanc »).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Gwen- / Gueng-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-sant" data-label="Sant- / Saint-" data-court="brique Sant- / Saint-">
+  <div class="rel-bloc__texte"><h3 lang="br">Sant- / Saint-</h3>
+  <p>Saint.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Saint-Brieuc (Sant-Brieg), Saint-Malo (Sant-Maloù), Saint-Pol-de-Léon (Kastell-Paol).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Sant- / Saint-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-pen" data-label="Pen- / Penn-" data-court="brique Pen- / Penn-">
+  <div class="rel-bloc__texte"><h3 lang="br">Pen- / Penn-</h3>
+  <p>Tête, bout, pointe (du breton <em>penn</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Penmarc'h, Pencran (Penn-ar-C'hraon).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Pen- / Penn-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-ros" data-label="Ros-" data-court="brique Ros-">
+  <div class="rel-bloc__texte"><h3 lang="br">Ros-</h3> <span class="badge-probable">sens probable</span>
+  <p>Tertre, colline (du breton <em>roz</em> ; sens probable, le mot a évolué).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Roscoff (Rosko), Rosporden, Rostrenen (Rostrenenn).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Ros-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-poull" data-label="Poull- / Poul-" data-court="brique Poull- / Poul-">
+  <div class="rel-bloc__texte"><h3 lang="br">Poull- / Poul-</h3>
+  <p>Mare, anse, creux d'eau (du breton <em>poull</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Pouldreuzic, Pouldergat, Le Pouldu.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Poull- / Poul-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-coat" data-label="Coat- / Coët-" data-court="brique Coat- / Coët-">
+  <div class="rel-bloc__texte"><h3 lang="br">Coat- / Coët-</h3>
+  <p>Bois, forêt (du breton <em>koad</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Coëtlogon, Coëtmieux, Coat-Méal.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Coat- / Coët-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-bod" data-label="Bod-" data-court="brique Bod-">
+  <div class="rel-bloc__texte"><h3 lang="br">Bod-</h3>
+  <p>Demeure, résidence (du breton <em>bod</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Bodilis (Bodiliz), Botsorhel.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Bod-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-moustoir" data-label="Moustoir- / Mouster-" data-court="brique Moustoir- / Mouster-">
+  <div class="rel-bloc__texte"><h3 lang="br">Moustoir- / Mouster-</h3>
+  <p>Monastère, moutier.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Le Moustoir, Moustoir-Ac, Moustoir-Remungol.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Moustoir- / Mouster-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-pont" data-label="Pont- / Pond-" data-court="brique Pont- / Pond-">
+  <div class="rel-bloc__texte"><h3 lang="br">Pont- / Pond-</h3>
+  <p>Pont.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Pontivy (Pondi), Pont-l'Abbé (Pont-'n-Abad), Pont-Croix.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Pont- / Pond-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-aber" data-label="Aber-" data-court="brique Aber-">
+  <div class="rel-bloc__texte"><h3 lang="br">Aber-</h3>
+  <p>Aber, estuaire.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> l'aber Wrac'h, l'aber Benoît, l'aber Ildut (les trois abers du Léon).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Aber-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-menez" data-label="Menez- / Ménez-" data-court="brique Menez- / Ménez-">
+  <div class="rel-bloc__texte"><h3 lang="br">Menez- / Ménez-</h3>
+  <p>Mont, montagne (du breton <em>menez</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Ménez-Hom, Ménez-Bré, Ménez-Meur (des sommets).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Menez- / Ménez-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-beg" data-label="Beg-" data-court="brique Beg-">
+  <div class="rel-bloc__texte"><h3 lang="br">Beg-</h3>
+  <p>Pointe, bec (du breton <em>beg</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Beg-Meil, Beg-Léguer.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Beg-"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-an-ar" data-label="an / ar" data-court="brique an / ar">
+  <div class="rel-bloc__texte"><h3 lang="br">an / ar</h3>
+  <p>L'article défini breton (« le, la, les »). Il soude souvent deux mots.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> An Oriant (Lorient, « l'Orient »), An Alre (Auray).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour an / ar"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-bro" data-label="bro / Breizh" data-court="brique bro / Breizh">
+  <div class="rel-bloc__texte"><h3 lang="br">bro / Breizh</h3>
+  <p>Pays (du breton <em>bro</em>), et Bretagne (Breizh).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Penn-ar-Bed (le Finistère, « le bout du monde »), Breizh.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour bro / Breizh"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<h3 class="rel-soustitre">En fin de nom</h3>
+<section class="rel-bloc" data-bloc="brique-kemper" data-label="-kemper / Kemper" data-court="brique -kemper / Kemper">
+  <div class="rel-bloc__texte"><h3 lang="br">-kemper / Kemper</h3>
+  <p>Confluent.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Quimper (Kemper), Quimperlé (Kemperle, « le confluent de l'Ellé »), Quemper-Guézennec.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -kemper / Kemper"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-kastell" data-label="-kastell / -gastel / -castel" data-court="brique -kastell / -gastel / -castel">
+  <div class="rel-bloc__texte"><h3 lang="br">-kastell / -gastel / -castel</h3>
+  <p>Château (du latin <em>castellum</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Plougastel-Daoulas, Trégastel, Saint-Pol-de-Léon (Kastell-Paol).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -kastell / -gastel / -castel"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-iliz" data-label="-iliz (-ilis, -illis)" data-court="brique -iliz">
+  <div class="rel-bloc__texte"><h3 lang="br">-iliz (-ilis, -illis)</h3>
+  <p>Église (du breton <em>iliz</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Lannilis (Lanniliz), Bodilis (Bodiliz).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -iliz (-ilis, -illis)"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-mael" data-label="-mael" data-court="brique -mael">
+  <div class="rel-bloc__texte"><h3 lang="br">-mael</h3> <span class="badge-probable">sens probable</span>
+  <p>Prince, chef (du vieux breton <em>mael</em> ; sens probable).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Ploërmel (Ploermael), Maël-Carhaix, Maël-Pestivien.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -mael"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-meur" data-label="-meur" data-court="brique -meur">
+  <div class="rel-bloc__texte"><h3 lang="br">-meur</h3>
+  <p>Grand (du breton <em>meur</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Plomeur (Ploveur), Ploemeur (Plañvour).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -meur"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-nevez" data-label="-nevez" data-court="brique -nevez">
+  <div class="rel-bloc__texte"><h3 lang="br">-nevez</h3>
+  <p>Neuf, nouveau (du breton <em>nevez</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Plounévez-Lochrist, Plonévez-du-Faou, Plounevez-Moëdec.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -nevez"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-march" data-label="-marc&#x27;h" data-court="brique -marc&#x27;h">
+  <div class="rel-bloc__texte"><h3 lang="br">-marc&#x27;h</h3>
+  <p>Cheval (du breton <em>marc'h</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Penmarc'h (« le bout du cheval »), Kermarc'h.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -marc&#x27;h"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-ac" data-label="-ac / -ec / -oc (formes françaises -é, -y)" data-court="brique -ac / -ec / -oc">
+  <div class="rel-bloc__texte"><h3 lang="br">-ac / -ec / -oc (formes françaises -é, -y)</h3>
+  <p>« Domaine de (un nom de personne) », suffixe gallo-romain <em>-acum</em>.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Carnac (Karnag), Bourbriac (Boulvriag), Lanvéoc (Lañveog).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -ac / -ec / -oc (formes françaises -é, -y)"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-ach" data-label="-ac&#x27;h / -ec&#x27;h" data-court="brique -ac&#x27;h / -ec&#x27;h">
+  <div class="rel-bloc__texte"><h3 lang="br">-ac&#x27;h / -ec&#x27;h</h3> <span class="badge-probable">sens probable</span>
+  <p>Variante bretonne du même suffixe domanial ; on la retrouve surtout dans les formes en langue bretonne.</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Logunec'h (Locminé), Penmarc'h.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -ac&#x27;h / -ec&#x27;h"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="brique-venez" data-label="-venez / -enez" data-court="brique -venez / -enez">
+  <div class="rel-bloc__texte"><h3 lang="br">-venez / -enez</h3>
+  <p>Île (du breton <em>enez</em>).</p>
+  <p class="brique-carte__ex"><span class="etiquette">Exemples</span> Douarnenez (probablement « la terre de l'île », <em>douar an enez</em>).</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour -venez / -enez"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<h2 class="rel-titre">2. La page « Pourquoi ce site »</h2>
+<p class="rel-consigne">Le ton général : est-ce que ça sonne juste et sobre, sans folklore&nbsp;?</p>
+<section class="rel-bloc" data-bloc="pq-1" data-label="« En Bretagne, on croise des panneaux bilingues tous… »" data-court="bloc 1">
+  <div class="rel-bloc__texte"><p>En Bretagne, on croise des panneaux bilingues tous les jours. À l'entrée des communes, sur les routes, en plein bourg. La plupart d'entre nous passons devant sans pouvoir les lire : on devine que « Kemper », « Gwengamp » ou « An Oriant » veulent dire quelque chose, mais le sens nous échappe.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « En Bretagne, on croise des panneaux bilingues tous… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-2" data-label="« Ce site part d&#x27;un constat simple. Le breton… »" data-court="bloc 2">
+  <div class="rel-bloc__texte"><p>Ce site part d'un constat simple. Le breton n'est pas une langue d'autrefois, c'est une langue écrite à côté de nous, sur la signalétique du quotidien. Il manque juste une clé pour la lire.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « Ce site part d&#x27;un constat simple. Le breton… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-3" data-label="« Alors nous avons construit la clé. Tu tapes… »" data-court="bloc 3">
+  <div class="rel-bloc__texte"><p>Alors nous avons construit la clé. Tu tapes le nom de ta commune, le site affiche son nom breton et ce qu'il signifie. De fiche en fiche, tu apprends à lire les panneaux toi-même : Plou- la paroisse, Ker- le village, Loc- le lieu consacré. À la fin, un panneau n'est plus une énigme.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « Alors nous avons construit la clé. Tu tapes… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-4" data-label="« Trois engagements, et rien de plus : »" data-court="bloc 4">
+  <div class="rel-bloc__texte"><p>Trois engagements, et rien de plus :</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « Trois engagements, et rien de plus : »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-5" data-label="« C&#x27;est gratuit, sans compte, sans inscription. Chaque information… »" data-court="bloc 5">
+  <div class="rel-bloc__texte"><ul>
+<li>C'est gratuit, sans compte, sans inscription.</li>
+<li>Chaque information est sourcée. Rien n'est inventé : les noms viennent d'OpenStreetMap, de Wikidata et de Wikipédia en breton, et chaque fiche l'indique.</li>
+<li>Chaque fiche est vérifiée systématiquement contre sa source (OpenStreetMap, Wikidata, Wikipédia en breton). C'est notre garde-fou contre les approximations, et contre les clichés.</li>
+</ul></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « C&#x27;est gratuit, sans compte, sans inscription. Chaque information… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-6" data-label="« Nous n&#x27;avons pas essayé de faire joli carte… »" data-court="bloc 6">
+  <div class="rel-bloc__texte"><p>Nous n'avons pas essayé de faire joli carte postale. Le breton mérite mieux qu'un folklore : c'est une langue vivante, avec une logique, et elle se laisse lire à ceux qui en ont la clé.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « Nous n&#x27;avons pas essayé de faire joli carte… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="pq-7" data-label="« Le site est maintenu par Brozapi, un petit… »" data-court="bloc 7">
+  <div class="rel-bloc__texte"><p>Le site est maintenu par Brozapi, un petit studio français qui construit des outils web simples. Il a été pensé comme un commun : les données brutes sont libres de réutilisation (voir Sources et méthode), et toute correction est la bienvenue.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour « Le site est maintenu par Brozapi, un petit… »"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<h2 class="rel-titre">3. La page « Sources et méthode »</h2>
+<p class="rel-consigne">Même principe, section par section.</p>
+<section class="rel-bloc" data-bloc="src-1" data-label="Introduction" data-court="Introduction">
+  <div class="rel-bloc__texte"><p>Ce site n'affiche que des informations que l'on peut citer. Il n'y a pas de texte généré automatiquement sur les fiches : chaque nom vient d'une source, et la source est écrite sur la fiche.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Introduction"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="src-2" data-label="D&#x27;où viennent les données" data-court="D&#x27;où viennent les données">
+  <div class="rel-bloc__texte"><p><strong>OpenStreetMap</strong></p>
+<p>Les noms bretons des communes viennent d'OpenStreetMap (le champ <code>name:br</code>), alimenté entre autres par des contributeurs bretons très actifs. Licence ODbL : on peut les réutiliser à condition de citer l'origine et de repartager la base dérivée sous la même licence. C'est pourquoi ce site indique, et l'adresse exacte est disponible sur demande.</p>
+<ul>
+<li>Attribution : © les contributeurs d'OpenStreetMap, sous licence ODbL.</li>
+</ul>
+<p><strong>Wikidata</strong></p>
+<p>Les correspondances entre le nom français et le nom breton, et une partie des informations de base sur chaque commune, viennent de Wikidata.</p>
+<ul>
+<li>Attribution : Wikidata, sous licence CC0 (domaine public).</li>
+</ul>
+<p><strong>Wikipédia en breton</strong></p>
+<p>Les étymologies et les sens des noms s'appuient sur Wikipédia en breton, dont les articles sur la toponymie sont particulièrement fournis.</p>
+<ul>
+<li>Attribution : Wikipédia en breton, sous licence CC BY-SA.</li>
+</ul></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour D&#x27;où viennent les données"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="src-3" data-label="La méthode" data-court="La méthode">
+  <div class="rel-bloc__texte"><p>1. On rassemble les noms depuis les sources ci-dessus, sans rien réécrire soi-même.</p>
+<p>2. On les décompose en briques (Plou-, Ker-, Loc-…) pour expliquer la construction de chaque nom.</p>
+<p>3. Chaque fiche affiche sa source, de façon visible.</p>
+<p>4. Chaque fiche est vérifiée systématiquement contre sa source avant publication.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour La méthode"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="src-4" data-label="Ce que ce site n&#x27;est pas" data-court="Ce que ce site n&#x27;est pas">
+  <div class="rel-bloc__texte"><ul>
+<li>Ce n'est pas une traduction automatique. Aucun nom n'est deviné par une machine.</li>
+<li>Ce n'est pas un relevé de « KerOfis » ni de la base de l'Office public de la langue bretonne : ce site n'utilise ni le nom, ni les données de ce service, qui dispose de sa propre base officielle.</li>
+<li>Ce n'est pas une promesse d'exhaustivité. La couverture des communes est large, celle des plus petits lieux-dits moins complète ; une branche d'ajouts y remédiera progressivement.</li>
+</ul></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Ce que ce site n&#x27;est pas"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="src-5" data-label="Signaler une erreur" data-court="Signaler une erreur">
+  <div class="rel-bloc__texte"><p>Une faute d'orthographe, une étymologie discutable, une source à corriger : tout retour est bienvenu. Écrire à contact@brozapi.com. Chaque signalement est relu un à un, à la main.</p></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Signaler une erreur"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+<section class="rel-bloc" data-bloc="src-6" data-label="Compléments techniques" data-court="Compléments techniques">
+  <div class="rel-bloc__texte"><ul>
+<li>Fond de carte des départements (page d'accueil) : données IGN GEOFLA via le jeu de données ouvert france-geojson, sous Licence Ouverte Etalab, simplifiées pour le web.</li>
+<li>La base dérivée complète (noms bretons croisés OpenStreetMap × Wikidata) est repartagée sous licence ODbL sur <a href="https://github.com/vizinote/toponymie-bretonne">github.com/vizinote/toponymie-bretonne</a>.</li>
+</ul></div>
+  <div class="rel-bloc__actions">
+    <button type="button" class="rel-btn rel-btn--ok">C'est bon pour moi</button>
+    <button type="button" class="rel-btn rel-btn--corr">Je corrige / je commente</button>
+  </div>
+  <textarea class="rel-corr" rows="3" placeholder="Ta correction ou ton commentaire…" aria-label="Correction pour Compléments techniques"></textarea>
+  <p class="rel-etat" aria-live="polite"></p>
+</section>
+
+<h2 class="rel-titre">4. Pour finir</h2>
+<div class="rel-final">
+  <fieldset id="rel-mention">
+    <legend>Veux-tu être mentionnée comme relectrice sur le site&nbsp;?</legend>
+    <label class="rel-choix"><input type="radio" name="mention" value="Oui, avec mon nom complet"> Oui, avec mon nom complet</label>
+    <label class="rel-choix"><input type="radio" name="mention" value="Oui, juste mon prénom"> Oui, juste mon prénom</label>
+    <label class="rel-choix"><input type="radio" name="mention" value="Je préfère rester anonyme"> Je préfère rester anonyme</label>
+  </fieldset>
+  <p style="margin:1.2rem 0 .3rem"><label for="rel-mot"><strong>Un mot pour Franck&nbsp;?</strong> (optionnel)</label></p>
+  <textarea class="rel-mot" id="rel-mot" rows="3" placeholder="Ce que tu veux — une remarque générale, un encouragement, un doute…"></textarea>
+</div>
+
+<h2 class="rel-titre">5. Envoyer ta relecture</h2>
+<div class="rel-envoi">
+  <p style="margin-top:0">Quand tu as fini (ou même si tu n'as pas tout fait), clique ici : la page
+  rassemble toutes tes réponses dans un texte lisible, prêt à m'envoyer.</p>
+  <div class="rel-envoi__actions">
+    <button type="button" class="rel-btn--grand" id="rel-preparer">Préparer l'envoi</button>
+  </div>
+  <div class="rel-sortie" id="rel-sortie">
+    <textarea id="rel-texte" rows="14" readonly aria-label="Texte compilé de ta relecture"></textarea>
+    <p class="rel-note" id="rel-note-mail">Ton logiciel d'email va s'ouvrir avec tout le texte déjà rempli.
+       Si rien ne s'ouvre, ou si tu préfères passer par Messenger :</p>
+    <p class="rel-note rel-note--trop-long" id="rel-note-long" hidden>Le texte est trop long pour passer
+       automatiquement dans un email : utilise le bouton « Copier le texte » ci-dessous, puis colle-le
+       dans un email à contact@brozapi.com ou dans Messenger.</p>
+    <div class="rel-envoi__actions">
+      <a class="rel-btn--grand" id="rel-mailto" href="#">Ouvrir dans ma messagerie</a>
+      <button type="button" class="rel-btn--copie" id="rel-copier">Copier le texte</button>
+    </div>
+    <p class="rel-note" id="rel-copie-etat" aria-live="polite"></p>
+  </div>
+</div>
+
+</div>
+</main>
+<footer class="pied">
+  <div class="cadre">
+    <p><strong>Kervillage</strong> — ton village en breton. Un outil gratuit du studio Brozapi.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var CLE = "kervillage-relecture-v1";
+  var LIMITE_MAILTO = 1800;
+  var blocs = Array.prototype.slice.call(document.querySelectorAll(".rel-bloc"));
+  var etat = { reponses: {}, mention: "", mot: "" };
+
+  try {
+    var brut = localStorage.getItem(CLE);
+    if (brut) {
+      var charge = JSON.parse(brut);
+      if (charge && typeof charge === "object") {
+        etat.reponses = charge.reponses || {};
+        etat.mention = charge.mention || "";
+        etat.mot = charge.mot || "";
+      }
+    }
+  } catch (e) { /* stockage indisponible : la page fonctionne quand meme */ }
+
+  function sauvegarder() {
+    try { localStorage.setItem(CLE, JSON.stringify(etat)); } catch (e) {}
+  }
+
+  function reponseDe(id) {
+    return etat.reponses[id] || { ok: false, corr: "" };
+  }
+
+  function rafraichirBloc(section) {
+    var id = section.getAttribute("data-bloc");
+    var rep = reponseDe(id);
+    var btnOk = section.querySelector(".rel-btn--ok");
+    var btnCorr = section.querySelector(".rel-btn--corr");
+    var champ = section.querySelector(".rel-corr");
+    var etatTxt = section.querySelector(".rel-etat");
+    btnOk.setAttribute("aria-pressed", rep.ok ? "true" : "false");
+    btnCorr.setAttribute("aria-pressed", rep.corr ? "true" : "false");
+    champ.value = rep.corr || "";
+    champ.classList.toggle("is-visible", !!rep.corr || champ.dataset.ouvert === "1");
+    section.classList.toggle("rel-bloc--ok", rep.ok && !rep.corr);
+    section.classList.toggle("rel-bloc--corr", !!rep.corr);
+    etatTxt.textContent = rep.corr ? "Correction notée — merci !" : (rep.ok ? "Noté, merci !" : "");
+  }
+
+  function progression() {
+    var faits = blocs.filter(function (s) {
+      var rep = reponseDe(s.getAttribute("data-bloc"));
+      return rep.ok || (rep.corr && rep.corr.trim());
+    }).length;
+    document.getElementById("rel-rempli").style.width = (faits / blocs.length * 100) + "%";
+    document.getElementById("rel-compteur").textContent = faits + " / " + blocs.length + " blocs relus";
+  }
+
+  blocs.forEach(function (section) {
+    var id = section.getAttribute("data-bloc");
+    var btnOk = section.querySelector(".rel-btn--ok");
+    var btnCorr = section.querySelector(".rel-btn--corr");
+    var champ = section.querySelector(".rel-corr");
+    btnOk.addEventListener("click", function () {
+      var rep = reponseDe(id);
+      rep.ok = !rep.ok;
+      if (rep.ok) { rep.corr = ""; champ.dataset.ouvert = ""; }
+      etat.reponses[id] = rep;
+      sauvegarder(); rafraichirBloc(section); progression();
+    });
+    btnCorr.addEventListener("click", function () {
+      champ.dataset.ouvert = champ.dataset.ouvert === "1" ? "" : "1";
+      rafraichirBloc(section);
+      if (champ.dataset.ouvert === "1") champ.focus();
+    });
+    champ.addEventListener("input", function () {
+      var rep = reponseDe(id);
+      rep.corr = champ.value;
+      if (champ.value.trim()) rep.ok = false;
+      etat.reponses[id] = rep;
+      sauvegarder(); rafraichirBloc(section); progression();
+    });
+    champ.dataset.ouvert = reponseDe(id).corr ? "1" : "";
+    rafraichirBloc(section);
+  });
+  progression();
+
+  // mention + mot libre
+  var radios = document.querySelectorAll('input[name="mention"]');
+  radios.forEach(function (r) {
+    if (r.value === etat.mention) r.checked = true;
+    r.addEventListener("change", function () {
+      etat.mention = r.value; sauvegarder();
+    });
+  });
+  var champMot = document.getElementById("rel-mot");
+  champMot.value = etat.mot;
+  champMot.addEventListener("input", function () {
+    etat.mot = champMot.value; sauvegarder();
+  });
+
+  document.getElementById("rel-reset").addEventListener("click", function () {
+    if (!confirm("Effacer toutes tes réponses et recommencer à zéro ?")) return;
+    etat = { reponses: {}, mention: "", mot: "" };
+    sauvegarder();
+    blocs.forEach(function (s) { s.querySelector(".rel-corr").dataset.ouvert = ""; rafraichirBloc(s); });
+    radios.forEach(function (r) { r.checked = false; });
+    champMot.value = "";
+    progression();
+  });
+
+  // compilation
+  function compiler() {
+    var lignes = [];
+    lignes.push("Relecture Kervillage — Enora");
+    lignes.push("(envoyé le " + new Date().toLocaleDateString("fr-FR") + ")");
+    lignes.push("");
+    var sectionCourante = "";
+    var groupe = null; // {ok:[], paslu:[], corr:[...]}
+    function viderGroupe() {
+      if (!groupe) return;
+      lignes.push("");
+      lignes.push("== " + groupe.titre.toUpperCase() + " ==");
+      groupe.corr.forEach(function (c) { lignes.push("• " + c); });
+      if (groupe.ok.length) lignes.push("OK : " + groupe.ok.join(", "));
+      if (groupe.paslu.length) lignes.push("(pas relu) : " + groupe.paslu.join(", "));
+      groupe = null;
+    }
+    blocs.forEach(function (s) {
+      var h2 = s.previousElementSibling;
+      while (h2 && !h2.classList.contains("rel-titre") && !h2.classList.contains("rel-soustitre")) {
+        h2 = h2.previousElementSibling;
+      }
+      if (h2 && h2.classList.contains("rel-titre") &&
+          (!groupe || h2.textContent !== sectionCourante)) {
+        viderGroupe();
+        sectionCourante = h2.textContent;
+        groupe = { titre: sectionCourante.replace(/^\d+\.\s*/, ""), ok: [], paslu: [], corr: [] };
+      }
+      var label = s.getAttribute("data-court");
+      var rep = reponseDe(s.getAttribute("data-bloc"));
+      if (rep.corr && rep.corr.trim()) {
+        groupe.corr.push(label + " : CORRECTION — " + rep.corr.trim().replace(/\s+/g, " "));
+      } else if (rep.ok) {
+        groupe.ok.push(label);
+      } else {
+        groupe.paslu.push(label);
+      }
+    });
+    viderGroupe();
+    lignes.push("");
+    lignes.push("== MENTION COMME RELECTRICE ==");
+    lignes.push(etat.mention || "(pas de réponse)");
+    if (etat.mot && etat.mot.trim()) {
+      lignes.push("");
+      lignes.push("== UN MOT POUR FRANCK ==");
+      lignes.push(etat.mot.trim());
+    }
+    return lignes.join("\n");
+  }
+
+  document.getElementById("rel-preparer").addEventListener("click", function () {
+    var texte = compiler();
+    var sortie = document.getElementById("rel-sortie");
+    var champTexte = document.getElementById("rel-texte");
+    var lienMail = document.getElementById("rel-mailto");
+    var noteMail = document.getElementById("rel-note-mail");
+    var noteLong = document.getElementById("rel-note-long");
+    champTexte.value = texte;
+    var uri = "mailto:contact@brozapi.com?subject=" +
+      encodeURIComponent("Relecture Kervillage — Enora") +
+      "&body=" + encodeURIComponent(texte);
+    if (texte.length <= LIMITE_MAILTO) {
+      lienMail.href = uri;
+      lienMail.style.display = "";
+      noteMail.hidden = false;
+      noteLong.hidden = true;
+      window.location.href = uri; // ouvre la messagerie, tout est pré-rempli
+    } else {
+      lienMail.style.display = "none";
+      noteMail.hidden = true;
+      noteLong.hidden = false;
+    }
+    sortie.classList.add("is-visible");
+    sortie.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  document.getElementById("rel-copier").addEventListener("click", function () {
+    var champTexte = document.getElementById("rel-texte");
+    var etatCopie = document.getElementById("rel-copie-etat");
+    function ok() { etatCopie.textContent = "Copié ! Tu peux le coller dans Messenger ou un email."; }
+    function manuel() {
+      champTexte.focus(); champTexte.select();
+      try { document.execCommand("copy"); ok(); }
+      catch (e) { etatCopie.textContent = "Sélectionne le texte ci-dessus et copie-le (appui long → Copier)."; }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(champTexte.value).then(ok, manuel);
+    } else { manuel(); }
+  });
+})();
+</script>
+</body>
+</html>
